@@ -75,28 +75,33 @@ function updateGrid(){
 function countNeighbours(grid, x, y){
   let count = 0;
 
-  // no wrap around
-  // for (let i = y-1; i <= y+1; i++) {
-  //   for (let j = x-1; j <= x+1; j++) {
-  //     if ((i >= 0) && (i <= grid.length-1)) {
-  //       if ((j >= 0) && (j <= grid[0].length-1)) {
-  //         if (((i != y) || (j != x)) && (grid[i][j] == 1)) {
-  //           count++;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+  if (wrap == true) {
 
-  // wrap around
-  for (let i = y-1; i <= y+1; i++) {
-    for (let j = x-1; j <= x+1; j++) {
+    for (let i = y-1; i <= y+1; i++) {
+      for (let j = x-1; j <= x+1; j++) {
 
-      let row = (i + grid.length) % grid.length;
-      let col = (j + grid[0].length) % grid[0].length;
+        let row = (i + grid.length) % grid.length;
+        let col = (j + grid[0].length) % grid[0].length;
 
-      if (((row != y) || (col != x)) && (grid[row][col] == 1)) {
-        count++;
+        if (((row != y) || (col != x)) && (grid[row][col] == 1)) {
+          count++;
+        }
+      }
+    }
+  }
+
+  else if (wrap == false) {
+
+    for (let i = y-1; i <= y+1; i++) {
+      for (let j = x-1; j <= x+1; j++) {
+
+        if ((i >= 0) && (i <= grid.length-1)) {
+          if ((j >= 0) && (j <= grid[0].length-1)) {
+            if (((i != y) || (j != x)) && (grid[i][j] == 1)) {
+              count++;
+            }
+          }
+        }
       }
     }
   }
@@ -153,6 +158,19 @@ function toggleAction(checked){
   }
 }
 
+function toggleWrap(checked){
+  if (checked == true) {
+    wrap = false;
+    document.getElementById('offText').style.opacity = 1.0;
+    document.getElementById('onText').style.opacity = 0.5;
+  }
+  else if (checked == false){
+    wrap = true;
+    document.getElementById('onText').style.opacity = 1.0;
+    document.getElementById('offText').style.opacity = 0.5;
+  }
+}
+
 function mainLoop(timestamp){
   if (paused == false) {
     if (timestamp < lastRender + (1000 / maxFPS)) {
@@ -163,7 +181,6 @@ function mainLoop(timestamp){
 
     grid = updateGrid();
     drawGrid(canvas, grid, cellSize);
-    // updateCanvas(canvas);
     generation++;
     displayGeneration(generation);
     displayPopulation(population);
@@ -254,9 +271,14 @@ function initializeEvents(){
     togglePause();
   })
 
-  document.getElementById("switchInput").addEventListener("click", () => {
-    let checked = document.getElementById("switchInput").checked;
+  document.getElementById("actionInput").addEventListener("click", () => {
+    let checked = document.getElementById("actionInput").checked;
     toggleAction(checked);
+  })
+
+  document.getElementById("wrapInput").addEventListener("click", () => {
+    let checked = document.getElementById("wrapInput").checked;
+    toggleWrap(checked);
   })
 
   canvas.addEventListener("mousedown", (event) => {
@@ -304,7 +326,7 @@ function initializeEvents(){
 function setup(){
   // setup variables and canvas
   canvas = createCanvas(800, 600);
-  cellSize = 40;
+  cellSize = 10;
   grid = createGrid(canvas.width/cellSize, canvas.height/cellSize);
   drawGridLines(canvas, grid, cellSize);
 
@@ -314,6 +336,7 @@ function setup(){
   maxFPS = 60;
   action = "add"
   population = 0;
+  wrap = true;
 
   initializeEvents();
 }
@@ -328,6 +351,7 @@ let maxFPS;
 let mouseDown = false;
 let action;
 let population;
+let wrap;
 
 setup();
 

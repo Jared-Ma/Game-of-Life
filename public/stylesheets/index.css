@@ -2,7 +2,7 @@ div#sub > div {
   display: inline-block;
 }
 
-div#switchContainer > div {
+div.switchContainer > div {
   display: inline-block;
   vertical-align: middle;
 }
@@ -22,8 +22,18 @@ body {
   transition: opacity 0.25s ease;
 }
 
+#onText {
+  opacity: 1.0;
+  transition: opacity 0.25s ease;
+}
+
+#offText {
+  opacity: 0.5;
+  transition: opacity 0.25s ease;
+}
+
  /* The switch - the box around the slider */
-#switch {
+.switch {
   position: relative;
   cursor: pointer;
   display: inline-block;
@@ -32,14 +42,14 @@ body {
 }
 
 /* Hide default HTML checkbox */
-#switch input {
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
 /* The slider */
-#slider {
+.slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -52,7 +62,7 @@ body {
   border-radius: 34px;
 }
 
-#slider:before {
+.slider:before {
   position: absolute;
   content: "";
   height: 26px;
@@ -65,7 +75,7 @@ body {
   border-radius: 50%;
 }
 
-input:checked + #slider:before {
+input:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
