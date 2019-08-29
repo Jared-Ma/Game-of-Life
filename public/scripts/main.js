@@ -13,6 +13,7 @@ function setup(){
   wrap = true;
   gridLines = true;
   mouseDown = false;
+  patterns = new Patterns();
 
   initializeEvents();
 }
@@ -48,36 +49,12 @@ let mouseDown;
 let action;
 let population;
 let wrap;
-let gridLines
+let gridLines;
+let patterns;
 
 setup();
 
-grid[6][6] = 1;
-grid[6][7] = 1;
-grid[6][8] = 1;
-grid[6][9] = 1;
-grid[6][10] = 1;
-grid[6][11] = 1;
-grid[6][12] = 1;
-grid[6][13] = 1;
-grid[7][6] = 1;
-grid[7][8] = 1;
-grid[7][9] = 1;
-grid[7][10] = 1;
-grid[7][11] = 1;
-grid[7][13] = 1;
-grid[8][6] = 1;
-grid[8][7] = 1;
-grid[8][8] = 1;
-grid[8][9] = 1;
-grid[8][10] = 1;
-grid[8][11] = 1;
-grid[8][12] = 1;
-grid[8][13] = 1;
-
-population = countCells(grid);
-writePopulation(population);
-
-drawGrid(canvas, grid, cellSize);
+patterns.add(patterns.spaceships.glider, grid, 0, 0);
+patterns.add(patterns.stillLifes.block, grid, 5, 5);
 
 requestAnimationFrame(mainLoop);
