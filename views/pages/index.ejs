@@ -2,13 +2,24 @@
 <html>
 <head>
   <title>Game of Life</title>
+  <link rel="stylesheet" href="./stylesheets/index.css">
 </head>
 <body>
   <div id='main'>
   </div>
   <div id='sub'>
-    <button id="pauseButton">Start</button>
-    <p id="generationCount">Generation: 0</p>
+    <div>
+      <button id="pauseButton">Start</button>
+    </div>
+    <div id="generationCount">Generation: 0</div>
+    <div id='switchContainer'>
+      <div id="addText">Add</div>
+      <label id="switch">
+        <input id="switchInput" type="checkbox" autocomplete="off">
+        <span id="slider"></span>
+      </label>
+      <div id="deleteText">Delete</div>
+    </div>
   </div>
 </body>
 <script type="text/javascript" src="/scripts/main.js"></script>

@@ -48,8 +48,6 @@ function drawGridLines(canvas, grid, cellSize){
     ctx.lineTo(j*cellSize, grid.length*cellSize);
     ctx.stroke();
   }
-
-  return;
 }
 
 function updateGrid(){
@@ -86,15 +84,28 @@ function updateGrid(){
 function countNeighbours(grid, x, y){
   let count = 0;
 
-  // use modulo to wrap around
+  // no wrap around
+  // for (let i = y-1; i <= y+1; i++) {
+  //   for (let j = x-1; j <= x+1; j++) {
+  //     if ((i >= 0) && (i <= grid.length-1)) {
+  //       if ((j >= 0) && (j <= grid[0].length-1)) {
+  //         if (((i != y) || (j != x)) && (grid[i][j] == 1)) {
+  //           count++;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  // wrap around
   for (let i = y-1; i <= y+1; i++) {
     for (let j = x-1; j <= x+1; j++) {
-      if ((i >= 0) && (i <= grid.length-1)) {
-        if ((j >= 0) && (j <= grid[0].length-1)) {
-          if (((i != y) || (j != x)) && (grid[i][j] == 1)) {
-            count++;
-          }
-        }
+
+      let row = (i+grid.length) % grid.length;
+      let col = (j+grid[0].length) % grid[0].length;
+
+      if (((row != y) || (col != x)) && (grid[row][col] == 1)) {
+        count++;
       }
     }
   }
@@ -109,28 +120,22 @@ function drawGrid(canvas, grid, cellSize){
         drawCell(canvas, j, i, cellSize);
       }
       else if (grid[i][j] == 0) {
-        clearCell(canvas, j, i, cellSize);
+        eraseCell(canvas, j, i, cellSize);
       }
     }
   }
-
-  return;
 }
 
 function drawCell(canvas, x, y, cellSize){
   let ctx = canvas.getContext("2d");
   ctx.fillStyle = "black";
   ctx.fillRect(x*cellSize+1, y*cellSize+1, cellSize-2, cellSize-2);
-
-  return;
 }
 
-function clearCell(canvas, x, y, cellSize){
+function eraseCell(canvas, x, y, cellSize){
   let ctx = canvas.getContext("2d");
   ctx.fillStyle = "white";
   ctx.clearRect(x*cellSize+1, y*cellSize+1, cellSize-2, cellSize-2);
-
-  return;
 }
 
 function togglePause(){
@@ -141,6 +146,19 @@ function togglePause(){
   else if (paused == true) {
     paused = false;
     document.getElementById('pauseButton').innerHTML = 'Pause';
+  }
+}
+
+function toggleAction(checked){
+  if (checked == true) {
+    action = "delete";
+    document.getElementById('deleteText').style.opacity = 1.0;
+    document.getElementById('addText').style.opacity = 0.5;
+  }
+  else if (checked == false){
+    action = "add";
+    document.getElementById('addText').style.opacity = 1.0;
+    document.getElementById('deleteText').style.opacity = 0.5;
   }
 }
 
@@ -168,6 +186,7 @@ function writeGeneration(generation){
 
 function getMousePos(canvas, event){
   var rect = canvas.getBoundingClientRect();
+
   return {
     x: event.clientX - rect.left,
     y: event.clientY - rect.top
@@ -175,34 +194,92 @@ function getMousePos(canvas, event){
 }
 
 function locateCell(mousePos){
-  // let x = Math.floor((mousePos.x-1) / cellSize);
-  // let y = Math.floor((mousePos.y-1) / cellSize);
-  // BOUNDARY CHECK
-  let x = Math.floor(mousePos.x / cellSize);
-  let y = Math.floor(mousePos.y / cellSize);
+  let x = Math.floor((mousePos.x-2) / cellSize);
+  let y = Math.floor((mousePos.y-2) / cellSize);
+
   return {
     x: x,
     y: y
-  }
+  };
 }
 
-function updateCell(grid, x, y){
+function flipCell(grid, x, y){
   let newGrid = grid;
 
   if (newGrid[y][x] == 1) {
-    console.log('a')
     newGrid[y][x] = 0;
-    console.log(newGrid[y][x])
   }
   else if (newGrid[y][x] == 0) {
-    console.log('b')
-    console.log(y)
-    console.log(x)
     newGrid[y][x] = 1;
-    console.log(newGrid[y][x])
   }
 
   return newGrid;
+}
+
+function addCell(grid, x, y){
+  let newGrid = grid;
+  newGrid[y][x] = 1;
+
+  return newGrid;
+}
+
+function deleteCell(grid, x, y){
+  let newGrid = grid;
+  newGrid[y][x] = 0;
+
+  return newGrid;
+}
+
+function checkEvents(){
+
+  document.getElementById("pauseButton").addEventListener("click", () => {
+    togglePause();
+  })
+
+  document.getElementById("switchInput").addEventListener("click", () => {
+    let checked = document.getElementById("switchInput").checked;
+    toggleAction(checked);
+  })
+
+  canvas.addEventListener("mousedown", (event) => {
+    if (paused == true) {
+      var mousePos = getMousePos(canvas, event);
+      var index = locateCell(mousePos);
+
+      if (action == "add") {
+        grid = addCell(grid, index.x, index.y);
+      }
+      else if (action == "delete"){
+        grid = deleteCell(grid, index.x, index.y);
+      }
+
+      drawGrid(canvas, grid, cellSize);
+      mouseDown = true;
+    }
+  })
+
+  canvas.addEventListener("mousemove", (event) => {
+    if (paused == true && mouseDown == true) {
+      var mousePos = getMousePos(canvas, event);
+      var index = locateCell(mousePos);
+
+      if (action == "add") {
+        grid = addCell(grid, index.x, index.y);
+      }
+      else if (action == "delete"){
+        grid = deleteCell(grid, index.x, index.y);
+      }
+
+      drawGrid(canvas, grid, cellSize);
+      mouseDown = true;
+    }
+  })
+
+  canvas.addEventListener("mouseup", (event) => {
+    if (paused == true) {
+      mouseDown = false;
+    }
+  })
 }
 
 function setup(){
@@ -215,21 +292,10 @@ function setup(){
   generation = 0;
   paused = true;
   lastRender = 0;
-  maxFPS = 1;
+  maxFPS = 60;
+  action = "add"
 
-  // setup interactivity
-  document.getElementById("pauseButton").addEventListener("click", ()=>{
-    togglePause();
-  })
-
-  canvas.addEventListener("click", (event) => {
-    if (paused == true) {
-      var mousePos = getMousePos(canvas, event);
-      var index = locateCell(mousePos);
-      grid = updateCell(grid, index.x, index.y);
-      drawGrid(canvas, grid, cellSize);
-    }
-  })
+  checkEvents();
 }
 
 let generation;
@@ -239,6 +305,10 @@ let grid;
 let paused;
 let lastRender;
 let maxFPS;
+let mouseDown = false;
+// let currIndex;
+// let prevIndex;
+let action;
 
 setup();
 
