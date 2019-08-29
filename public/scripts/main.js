@@ -28,19 +28,21 @@ function drawGridLines(canvas, grid, cellSize){
   ctx.strokeStyle = "#bbbbbb";
   ctx.lineWidth = 2;
 
-  for (let i = 0; i <= grid.length; i++) {
+  for (let i = 1; i <= grid.length-1; i++) {
     ctx.beginPath();
     ctx.moveTo(0, i*cellSize);
     ctx.lineTo(grid[0].length*cellSize, i*cellSize);
     ctx.stroke();
   }
 
-  for (let j = 0; j <= grid[0].length; j++) {
+  for (let j = 1; j <= grid[0].length-1; j++) {
     ctx.beginPath();
     ctx.moveTo(j*cellSize, 0);
     ctx.lineTo(j*cellSize, grid.length*cellSize);
     ctx.stroke();
   }
+
+  drawBorders(canvas, grid, cellSize);
 }
 
 function updateGrid(){
@@ -124,14 +126,16 @@ function drawGrid(canvas, grid, cellSize){
 
 function drawCell(canvas, x, y, cellSize){
   let ctx = canvas.getContext("2d");
-  ctx.fillStyle = "black";
+  ctx.fillStyle = "white";
   ctx.fillRect(x*cellSize+1, y*cellSize+1, cellSize-2, cellSize-2);
 }
 
 function eraseCell(canvas, x, y, cellSize){
   let ctx = canvas.getContext("2d");
-  ctx.fillStyle = "white";
+  // ctx.fillStyle = "black";
   ctx.clearRect(x*cellSize+1, y*cellSize+1, cellSize-2, cellSize-2);
+
+  // either fill opposite color or clear
 }
 
 function togglePause(){
@@ -145,26 +149,26 @@ function togglePause(){
   }
 }
 
-function toggleAction(checked){
-  if (checked == true) {
+function toggleAction(){
+  if (action == "add") {
     action = "delete";
     document.getElementById('deleteText').style.opacity = 1.0;
     document.getElementById('addText').style.opacity = 0.5;
   }
-  else if (checked == false){
+  else if (action == "delete"){
     action = "add";
     document.getElementById('addText').style.opacity = 1.0;
     document.getElementById('deleteText').style.opacity = 0.5;
   }
 }
 
-function toggleWrap(checked){
-  if (checked == true) {
+function toggleWrap(){
+  if (wrap == true) {
     wrap = false;
     document.getElementById('offText').style.opacity = 1.0;
     document.getElementById('onText').style.opacity = 0.5;
   }
-  else if (checked == false){
+  else if (wrap == false){
     wrap = true;
     document.getElementById('onText').style.opacity = 1.0;
     document.getElementById('offText').style.opacity = 0.5;
@@ -265,21 +269,75 @@ function deleteCell(grid, x, y){
   return newGrid;
 }
 
+function updateFPS(){
+  maxFPS = document.getElementById("fpsInput").value;
+}
+
+function clearGrid(){
+  grid = createGrid(grid[0].length, grid.length);
+  drawGrid(canvas, grid, cellSize);
+}
+
+function clearGridLines(canvas, grid, cellSize){
+  let ctx = canvas.getContext("2d");
+  ctx.strokeStyle = document.getElementsByTagName("body")[0].style.backgroundColor;
+  ctx.lineWidth = 2;
+
+  for (let i = 1; i <= grid.length-1; i++) {
+    ctx.beginPath();
+    ctx.moveTo(0, i*cellSize);
+    ctx.lineTo(grid[0].length*cellSize, i*cellSize);
+    ctx.stroke();
+  }
+
+  for (let j = 1; j <= grid[0].length-1; j++) {
+    ctx.beginPath();
+    ctx.moveTo(j*cellSize, 0);
+    ctx.lineTo(j*cellSize, grid.length*cellSize);
+    ctx.stroke();
+  }
+
+  drawBorders(canvas, grid, cellSize);
+}
+
+function drawBorders(canvas, grid, cellSize){
+  let ctx = canvas.getContext("2d");
+  ctx.strokeStyle = "#bbbbbb";
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(grid[0].length*cellSize, 0);
+  ctx.lineTo(grid[0].length*cellSize, grid.length*cellSize);
+  ctx.lineTo(0, grid.length*cellSize);
+  ctx.lineTo(0, 0);
+  ctx.stroke();
+}
+
+function toggleGridLines(){
+  if(gridLines == true){
+    gridLines = false;
+    clearGridLines(canvas, grid, cellSize);
+  }
+  else if (gridLines == false){
+    gridLines = true;
+    drawGridLines(canvas, grid, cellSize);
+  }
+}
+
 function initializeEvents(){
 
-  document.getElementById("pauseButton").addEventListener("click", () => {
-    togglePause();
-  })
+  document.getElementById("pauseButton").addEventListener("click", () => togglePause());
 
-  document.getElementById("actionInput").addEventListener("click", () => {
-    let checked = document.getElementById("actionInput").checked;
-    toggleAction(checked);
-  })
+  document.getElementById("actionInput").addEventListener("click", () => toggleAction());
 
-  document.getElementById("wrapInput").addEventListener("click", () => {
-    let checked = document.getElementById("wrapInput").checked;
-    toggleWrap(checked);
-  })
+  document.getElementById("wrapInput").addEventListener("click", () => toggleWrap());
+
+  document.getElementById("clearButton").addEventListener("click", () => clearGrid());
+
+  document.getElementById("fpsInput").addEventListener("input", () => updateFPS());
+
+  document.getElementById("linesInput").addEventListener("click", () => toggleGridLines());
 
   canvas.addEventListener("mousedown", (event) => {
     if (paused == true) {
@@ -326,17 +384,20 @@ function initializeEvents(){
 function setup(){
   // setup variables and canvas
   canvas = createCanvas(800, 600);
-  cellSize = 10;
+  cellSize = 40;
   grid = createGrid(canvas.width/cellSize, canvas.height/cellSize);
   drawGridLines(canvas, grid, cellSize);
+  // clearGridLines(canvas, grid, cellSize);
+
 
   generation = 0;
   paused = true;
   lastRender = 0;
-  maxFPS = 60;
+  maxFPS = 1;
   action = "add"
   population = 0;
   wrap = true;
+  gridLines = true;
 
   initializeEvents();
 }
@@ -352,6 +413,7 @@ let mouseDown = false;
 let action;
 let population;
 let wrap;
+let gridLines
 
 setup();
 

@@ -4,7 +4,7 @@
   <title>Game of Life</title>
   <link rel="stylesheet" href="./stylesheets/index.css">
 </head>
-<body>
+<body style="background-color:#4a4a4a;">
   <div id='main'>
   </div>
   <div id='sub'>
@@ -14,6 +14,7 @@
     <div id="generationCount">Generation: 0</div>
     <div id="populationCount">Population: 0</div>
     <div class='switchContainer'>
+      <header>Mouse action:</header>
       <div id="addText" class="switchText">Add</div>
       <label class="switch">
         <input id="actionInput" type="checkbox" autocomplete="off">
@@ -22,9 +23,27 @@
       <div id="deleteText" class="switchText">Delete</div>
     </div>
     <div class='switchContainer'>
+      <header>Edge wrapping:</header>
       <div id="onText" class="switchText">On</div>
       <label class="switch">
         <input id="wrapInput" type="checkbox" autocomplete="off">
+        <span class="slider"></span>
+      </label>
+      <div id="offText" class="switchText">Off</div>
+    </div>
+    <div>
+      <button id="clearButton">Clear</button>
+    </div>
+    <div class="rangeContainer">
+      <header>Max FPS:</header>
+      <input id="fpsInput" type="range" min="1" max="30" step="1" value="1" autocomplete="off" oninput="fpsOutput.value = fpsInput.value">
+      <output id="fpsOutput">1</output>
+    </div>
+    <div class='switchContainer'>
+      <header>Grid Lines:</header>
+      <div id="onText" class="switchText">On</div>
+      <label class="switch">
+        <input id="linesInput" type="checkbox" autocomplete="off">
         <span class="slider"></span>
       </label>
       <div id="offText" class="switchText">Off</div>
