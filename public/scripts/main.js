@@ -10,13 +10,6 @@ function createCanvas(width, height){
   return canvas;
 }
 
-// function updateCanvas(canvas){
-//   let main = document.getElementById("main");
-//   main.appendChild(canvas);
-
-//   return;
-// }
-
 function createGrid(width, height){
   let grid = new Array(height);
 
@@ -63,16 +56,14 @@ function updateGrid(){
           newGrid[i][j] = 1;
         }
         else {
-          newGrid[i][j] = 0;
+          population--;
         }
       }
 
       else if (grid[i][j] == 0) {
         if (count == 3) {
           newGrid[i][j] = 1;
-        }
-        else {
-          newGrid[i][j] = 0;
+          population++;
         }
       }
     }
@@ -101,8 +92,8 @@ function countNeighbours(grid, x, y){
   for (let i = y-1; i <= y+1; i++) {
     for (let j = x-1; j <= x+1; j++) {
 
-      let row = (i+grid.length) % grid.length;
-      let col = (j+grid[0].length) % grid[0].length;
+      let row = (i + grid.length) % grid.length;
+      let col = (j + grid[0].length) % grid[0].length;
 
       if (((row != y) || (col != x)) && (grid[row][col] == 1)) {
         count++;
@@ -174,18 +165,37 @@ function mainLoop(timestamp){
     drawGrid(canvas, grid, cellSize);
     // updateCanvas(canvas);
     generation++;
-    writeGeneration(generation);
+    displayGeneration(generation);
+    displayPopulation(population);
   }
 
   requestAnimationFrame(mainLoop);
 }
 
-function writeGeneration(generation){
+function displayGeneration(generation){
   document.getElementById("generationCount").innerHTML = "Generation: " + generation.toString();
 }
 
+function countCells(grid){
+  let count = 0;
+
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
+      if (grid[i][j] == 1) {
+        count++;
+      }
+    }
+  }
+
+  return count;
+}
+
+function displayPopulation(population){
+  document.getElementById("populationCount").innerHTML = "Population: " + population.toString();
+}
+
 function getMousePos(canvas, event){
-  var rect = canvas.getBoundingClientRect();
+  let rect = canvas.getBoundingClientRect();
 
   return {
     x: event.clientX - rect.left,
@@ -218,19 +228,27 @@ function flipCell(grid, x, y){
 
 function addCell(grid, x, y){
   let newGrid = grid;
-  newGrid[y][x] = 1;
+
+  if (newGrid[y][x] == 0) {
+    newGrid[y][x] = 1;
+    population++;
+  }
 
   return newGrid;
 }
 
 function deleteCell(grid, x, y){
   let newGrid = grid;
-  newGrid[y][x] = 0;
+
+  if (newGrid[y][x] == 1) {
+    newGrid[y][x] = 0;
+    population--;
+  }
 
   return newGrid;
 }
 
-function checkEvents(){
+function initializeEvents(){
 
   document.getElementById("pauseButton").addEventListener("click", () => {
     togglePause();
@@ -243,8 +261,8 @@ function checkEvents(){
 
   canvas.addEventListener("mousedown", (event) => {
     if (paused == true) {
-      var mousePos = getMousePos(canvas, event);
-      var index = locateCell(mousePos);
+      let mousePos = getMousePos(canvas, event);
+      let index = locateCell(mousePos);
 
       if (action == "add") {
         grid = addCell(grid, index.x, index.y);
@@ -253,15 +271,16 @@ function checkEvents(){
         grid = deleteCell(grid, index.x, index.y);
       }
 
-      drawGrid(canvas, grid, cellSize);
       mouseDown = true;
+      drawGrid(canvas, grid, cellSize);
+      displayPopulation(population);
     }
   })
 
   canvas.addEventListener("mousemove", (event) => {
     if (paused == true && mouseDown == true) {
-      var mousePos = getMousePos(canvas, event);
-      var index = locateCell(mousePos);
+      let mousePos = getMousePos(canvas, event);
+      let index = locateCell(mousePos);
 
       if (action == "add") {
         grid = addCell(grid, index.x, index.y);
@@ -271,7 +290,7 @@ function checkEvents(){
       }
 
       drawGrid(canvas, grid, cellSize);
-      mouseDown = true;
+      displayPopulation(population);
     }
   })
 
@@ -294,8 +313,9 @@ function setup(){
   lastRender = 0;
   maxFPS = 60;
   action = "add"
+  population = 0;
 
-  checkEvents();
+  initializeEvents();
 }
 
 let generation;
@@ -306,9 +326,8 @@ let paused;
 let lastRender;
 let maxFPS;
 let mouseDown = false;
-// let currIndex;
-// let prevIndex;
 let action;
+let population;
 
 setup();
 
@@ -334,6 +353,10 @@ grid[8][10] = 1;
 grid[8][11] = 1;
 grid[8][12] = 1;
 grid[8][13] = 1;
+
+population = countCells(grid);
+displayPopulation(population);
+
 drawGrid(canvas, grid, cellSize);
 
 requestAnimationFrame(mainLoop);
