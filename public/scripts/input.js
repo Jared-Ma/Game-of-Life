@@ -41,11 +41,11 @@ function toggleWrap(){
 function toggleGridLines(){
   if(gridLines == true){
     gridLines = false;
-    clearGridLines(canvas, grid, cellSize);
+    clearGridLines(subCanvas, grid, cellSize);
   }
   else if (gridLines == false){
     gridLines = true;
-    drawGridLines(canvas, grid, cellSize);
+    drawGridLines(subCanvas, grid, cellSize);
   }
 }
 
@@ -67,7 +67,7 @@ function getMousePos(canvas, event){
 
 function beginDrawInput(event){
   if (paused == true) {
-    let mousePos = getMousePos(canvas, event);
+    let mousePos = getMousePos(subCanvas, event);
     let index = locateCell(mousePos);
 
     if (action == "add") {
@@ -78,7 +78,7 @@ function beginDrawInput(event){
     }
 
     mouseDown = true;
-    drawGrid(canvas, grid, cellSize);
+    drawGrid(mainCanvas, grid, cellSize);
     writePopulation(population);
   }
 }
@@ -86,7 +86,7 @@ function beginDrawInput(event){
 
 function drawInput(event){
   if (paused == true && mouseDown == true) {
-    let mousePos = getMousePos(canvas, event);
+    let mousePos = getMousePos(subCanvas, event);
     let index = locateCell(mousePos);
 
     if (action == "add") {
@@ -96,7 +96,7 @@ function drawInput(event){
       grid = deleteCell(grid, index.x, index.y);
     }
 
-    drawGrid(canvas, grid, cellSize);
+    drawGrid(mainCanvas, grid, cellSize);
     writePopulation(population);
   }
 }
@@ -122,9 +122,9 @@ function initializeEvents(){
 
   document.getElementById("fpsInput").addEventListener("input", () => updateFPS());
 
-  canvas.addEventListener("mousedown", (event) => beginDrawInput(event));
+  subCanvas.addEventListener("mousedown", (event) => beginDrawInput(event));
 
-  canvas.addEventListener("mousemove", (event) => drawInput(event));
+  subCanvas.addEventListener("mousemove", (event) => drawInput(event));
 
-  canvas.addEventListener("mouseup", (event) => endDrawInput(event));
+  subCanvas.addEventListener("mouseup", (event) => endDrawInput(event));
 }

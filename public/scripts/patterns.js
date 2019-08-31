@@ -29,6 +29,6 @@ function Patterns(){
       }
     }
 
-    drawGrid(canvas, grid, cellSize);
+    drawGrid(mainCanvas, grid, cellSize);
   }
 }

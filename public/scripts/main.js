@@ -1,8 +1,13 @@
 function setup(){
-  canvas = createCanvas(800, 600);
+  mainCanvas = createCanvas(800, 600);
+  mainCanvas.style.zIndex = -1;
+  mainCanvas.style.position = "relative";
+  subCanvas = createCanvas(800, 600);
+  subCanvas.style.zIndex = 0;
+  subCanvas.style.position = "absolute";
   cellSize = 40;
-  grid = createGrid(canvas.width/cellSize, canvas.height/cellSize);
-  drawGridLines(canvas, grid, cellSize);
+  grid = createGrid(mainCanvas.width/cellSize, mainCanvas.height/cellSize);
+  drawGridLines(subCanvas, grid, cellSize);
 
   generation = 0;
   paused = true;
@@ -28,7 +33,7 @@ function mainLoop(timestamp){
     lastRender = timestamp;
 
     grid = updateGrid();
-    drawGrid(canvas, grid, cellSize);
+    drawGrid(mainCanvas, grid, cellSize);
     generation++;
     writeGeneration(generation);
     writePopulation(population);
@@ -39,7 +44,8 @@ function mainLoop(timestamp){
 
 
 let generation;
-let canvas;
+let mainCanvas;
+let subCanvas;
 let cellSize;
 let grid;
 let paused;
