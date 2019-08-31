@@ -1,13 +1,15 @@
 function setup(){
-  mainCanvas = createCanvas(800, 600);
-  mainCanvas.style.zIndex = -1;
-  mainCanvas.style.position = "relative";
-  subCanvas = createCanvas(800, 600);
-  subCanvas.style.zIndex = 0;
-  subCanvas.style.position = "absolute";
-  cellSize = 40;
+  cellSize = 20;
+  canvasWidth = Math.floor(1600/cellSize) * cellSize;
+  canvasHeight = Math.floor(700/cellSize) * cellSize;
+  mainCanvas = createCanvas(canvasWidth, canvasHeight);
+  mainCanvas.id = "mainCanvas"
+  subCanvas = createCanvas(canvasWidth, canvasHeight);
+  subCanvas.id = "subCanvas"
+
   grid = createGrid(mainCanvas.width/cellSize, mainCanvas.height/cellSize);
   drawGridLines(subCanvas, grid, cellSize);
+  prevGrids = [];
 
   generation = 0;
   paused = true;
@@ -30,24 +32,22 @@ function mainLoop(timestamp){
       requestAnimationFrame(mainLoop);
       return;
     }
-    lastRender = timestamp;
 
-    grid = updateGrid();
-    drawGrid(mainCanvas, grid, cellSize);
-    generation++;
-    writeGeneration(generation);
-    writePopulation(population);
+    lastRender = timestamp;
+    nextState();
   }
 
   requestAnimationFrame(mainLoop);
 }
 
-
+let canvasWidth
+let canvasHeight
 let generation;
 let mainCanvas;
 let subCanvas;
 let cellSize;
 let grid;
+let prevGrids;
 let paused;
 let lastRender;
 let maxFPS;
@@ -57,6 +57,9 @@ let population;
 let wrap;
 let gridLines;
 let patterns;
+let cellColor;
+let gridLineColor;
+
 
 setup();
 

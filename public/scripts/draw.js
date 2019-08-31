@@ -2,7 +2,7 @@ function createCanvas(width, height){
   let canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
-  canvas.style.border = "1px #bbbbbb solid";
+  canvas.style.border = "1px #9e9e9e solid";
   canvas.style.left = 0;
   canvas.style.top = 0;
 
@@ -15,7 +15,7 @@ function createCanvas(width, height){
 
 function drawGridLines(canvas, grid, cellSize){
   let ctx = canvas.getContext("2d");
-  ctx.strokeStyle = "#bbbbbb";
+  ctx.strokeStyle = "#9e9e9e";
   ctx.lineWidth = 2;
 
   for (let i = 0; i <= grid.length; i++) {
@@ -42,7 +42,7 @@ function clearGridLines(canvas, grid, cellSize){
 
 function drawCell(canvas, x, y, cellSize){
   let ctx = canvas.getContext("2d");
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "#f0f0f0";
   ctx.fillRect(x*cellSize, y*cellSize, cellSize, cellSize);
 }
 

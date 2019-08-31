@@ -1,20 +1,102 @@
-div#sub > div {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-div.switchContainer > div {
-  display: inline-block;
-  vertical-align: middle;
-}
-
 body {
   font-family: "Helvetica";
   font-weight: 300;
   color: white;
+  background-color: #2a2a2e;
 }
 
-div.rangeContainer > div {
+
+/* SCREEN */
+
+#main {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+#mainCanvas {
+  position: relative;
+  z-index: -1;
+  background-color: #1e1e21;
+}
+
+#subCanvas {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
+
+
+/* TOOLBAR */
+
+#sub {
+  display: flex;
+  margin-top: 20px;
+}
+
+
+#sub1 {
+  display: inline-block;
+  margin-left: 150px;
+  /*border: 2px solid red;*/
+  width: 600px;
+  height: 150px;
+}
+
+
+/* BUTTONS */
+
+#buttons {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  width: 600px;
+  margin-top: 20px;
+}
+
+#buttons > td {
+  margin-bottom: 25px;
+  display: inline-block;
+  align-self: center;
+}
+
+button {
+    background-color: #4a4a4a;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+header {
+  margin-bottom: 15px;
+}
+
+
+/* SWITCHES */
+
+#switches {
+  text-align: center;
+  width: 600px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+#switches > div {
+  display: inline-block;
+}
+
+.switchContainer > header {
+  text-align: left;
+}
+
+.switchContainer > div {
   display: inline-block;
   vertical-align: middle;
 }
@@ -86,4 +168,31 @@ input:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
+}
+
+#sub2 {
+  display: inline-block;
+  margin-left: 10px;
+  width: 500px;
+}
+
+
+/* RANGES */
+
+#ranges {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+#ranges > div {
+  display: inline-block;
+}
+
+.rangeContainer {
+  margin-top: 20px;
+}
+
+.rangeContainer > input {
+  width: 150px;
 }

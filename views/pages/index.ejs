@@ -4,49 +4,86 @@
   <title>Game of Life</title>
   <link rel="stylesheet" href="./stylesheets/main.css">
 </head>
-<body style="background-color:#4a4a4a;">
+<body>
   <div id='main' style="position: relative;">
   </div>
   <div id='sub'>
-    <div>
-      <button id="pauseButton">Start</button>
+    <div id='sub1'>
+      <div id='buttons'>
+        <div>
+          <button id="pauseButton">Start</button>
+        </div>
+        <div>
+          <button id="backwardButton">Backward</button>
+        </div>
+        <div>
+          <button id="forwardButton">Forward</button>
+        </div>
+        <div>
+          <button id="clearButton">Clear</button>
+        </div>
+      </div>
+
+      <div id='switches'>
+        <div class='switchContainer'>
+          <header>Mouse action:</header>
+          <div id="addText" class="switchText">Add</div>
+          <label class="switch">
+            <input id="actionInput" type="checkbox" autocomplete="off">
+            <span class="slider"></span>
+          </label>
+          <div id="deleteText" class="switchText">Delete</div>
+        </div>
+        <div class='switchContainer'>
+          <header>Edge wrap:</header>
+          <div id="onText" class="switchText">On</div>
+          <label class="switch">
+            <input id="wrapInput" type="checkbox" autocomplete="off">
+            <span class="slider"></span>
+          </label>
+          <div id="offText" class="switchText">Off</div>
+        </div>
+        <div class='switchContainer'>
+          <header>Grid Lines:</header>
+          <div id="onText" class="switchText">On</div>
+          <label class="switch">
+            <input id="linesInput" type="checkbox" autocomplete="off">
+            <span class="slider"></span>
+          </label>
+          <div id="offText" class="switchText">Off</div>
+        </div>
+      </div>
     </div>
-    <div>
-      <button id="clearButton">Clear</button>
+
+    <div id='sub2'>
+      <div id='ranges'>
+        <div class="rangeContainer">
+          <header>Max FPS:</header>
+          <input id="fpsInput" type="range" min="1" max="30" step="1" value="1" autocomplete="off" oninput="fpsOutput.value = fpsInput.value">
+          <output id="fpsOutput">1</output>
+        </div>
+        <div class="rangeContainer">
+          <header>Cell Size:</header>
+          <input id="cellSizeInput" type="range" min="10" max="50" step="10" value="20" autocomplete="off" oninput="cellSizeOutput.value = cellSizeInput.value">
+          <output id="cellSizeOutput">20</output>
+        </div>
+        <div class="rangeContainer">
+          <header>Width:</header>
+          <input id="widthInput" type="range" min="300" max="1600" step="100" value="1600" autocomplete="off" oninput="widthOutput.value = widthInput.value">
+          <output id="widthOutput">1600</output>
+        </div>
+        <div class="rangeContainer">
+          <header>Height:</header>
+          <input id="heightInput" type="range" min="300" max="700" step="50" value="700" autocomplete="off" oninput="heightOutput.value = heightInput.value">
+          <output id="heightOutput">700</output>
+        </div>
+      </div>
     </div>
-    <div id="generationCount">Generation: 0</div>
-    <div id="populationCount">Population: 0</div>
-    <div class='switchContainer'>
-      <header>Mouse action:</header>
-      <div id="addText" class="switchText">Add</div>
-      <label class="switch">
-        <input id="actionInput" type="checkbox" autocomplete="off">
-        <span class="slider"></span>
-      </label>
-      <div id="deleteText" class="switchText">Delete</div>
-    </div>
-    <div class='switchContainer'>
-      <header>Edge wrapping:</header>
-      <div id="onText" class="switchText">On</div>
-      <label class="switch">
-        <input id="wrapInput" type="checkbox" autocomplete="off">
-        <span class="slider"></span>
-      </label>
-      <div id="offText" class="switchText">Off</div>
-    </div>
-    <div class='switchContainer'>
-      <header>Grid Lines:</header>
-      <div id="onText" class="switchText">On</div>
-      <label class="switch">
-        <input id="linesInput" type="checkbox" autocomplete="off">
-        <span class="slider"></span>
-      </label>
-      <div id="offText" class="switchText">Off</div>
-    </div>
-    <div class="rangeContainer">
-      <header>Max FPS:</header>
-      <input id="fpsInput" type="range" min="1" max="30" step="1" value="1" autocomplete="off" oninput="fpsOutput.value = fpsInput.value">
-      <output id="fpsOutput">1</output>
+    <div id='sub3'>
+      <div id='statistics'>
+        <div id="generationCount">Generation: 0</div>
+        <div id="populationCount">Population: 0</div>
+      </div>
     </div>
   </div>
   <script type="text/javascript" src="/scripts/grid.js"></script>

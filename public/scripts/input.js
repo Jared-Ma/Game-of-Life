@@ -78,6 +78,7 @@ function beginDrawInput(event){
     }
 
     mouseDown = true;
+    prevGrids[generation] = grid;
     drawGrid(mainCanvas, grid, cellSize);
     writePopulation(population);
   }
@@ -96,6 +97,7 @@ function drawInput(event){
       grid = deleteCell(grid, index.x, index.y);
     }
 
+    prevGrids[generation] = grid;
     drawGrid(mainCanvas, grid, cellSize);
     writePopulation(population);
   }
@@ -109,10 +111,43 @@ function endDrawInput(event){
 }
 
 
+function nextState(){
+  prevGrids[generation] = grid;
+  generation++;
+
+  // Saves drawings in a generation
+  if (prevGrids[generation]) {
+    grid = prevGrids[generation];
+  }
+  else {
+    grid = updateGrid();
+  }
+
+  drawGrid(mainCanvas, grid, cellSize);
+  writeGeneration(generation);
+  writePopulation(population);
+}
+
+
+function prevState(){
+  if (generation > 0) {
+    generation--;
+    grid = prevGrids[generation];
+    drawGrid(mainCanvas, grid, cellSize);
+    writeGeneration(generation);
+    writePopulation(population);
+  }
+}
+
+
 function initializeEvents(){
   document.getElementById("pauseButton").addEventListener("click", () => togglePause());
 
   document.getElementById("clearButton").addEventListener("click", () => clearGrid());
+
+  document.getElementById("forwardButton").addEventListener("click", () => nextState());
+
+  document.getElementById("backwardButton").addEventListener("click", () => prevState());
 
   document.getElementById("actionInput").addEventListener("click", () => toggleAction());
 
