@@ -10,6 +10,17 @@ function togglePause(){
 }
 
 
+function reset(){
+  prevGrids = [];
+  grid = createGrid(grid[0].length, grid.length);
+  drawGrid(mainCanvas, grid, cellSize);
+  generation = 0;
+  population = 0;
+  writeGeneration(generation);
+  writePopulation(population);
+}
+
+
 function toggleAction(){
   if (action == "add") {
     action = "delete";
@@ -27,13 +38,13 @@ function toggleAction(){
 function toggleWrap(){
   if (wrap == true) {
     wrap = false;
-    document.getElementById('offText').style.opacity = 1.0;
-    document.getElementById('onText').style.opacity = 0.5;
+    document.getElementById('offWrapText').style.opacity = 1.0;
+    document.getElementById('onWrapText').style.opacity = 0.5;
   }
   else if (wrap == false){
     wrap = true;
-    document.getElementById('onText').style.opacity = 1.0;
-    document.getElementById('offText').style.opacity = 0.5;
+    document.getElementById('onWrapText').style.opacity = 1.0;
+    document.getElementById('offWrapText').style.opacity = 0.5;
   }
 }
 
@@ -42,16 +53,38 @@ function toggleGridLines(){
   if(gridLines == true){
     gridLines = false;
     clearGridLines(subCanvas, grid, cellSize);
+    document.getElementById('offLinesText').style.opacity = 1.0;
+    document.getElementById('onLinesText').style.opacity = 0.5;
   }
   else if (gridLines == false){
     gridLines = true;
     drawGridLines(subCanvas, grid, cellSize);
+    document.getElementById('onLinesText').style.opacity = 1.0;
+    document.getElementById('offLinesText').style.opacity = 0.5;
   }
 }
 
 
 function updateFPS(){
   maxFPS = document.getElementById("fpsInput").value;
+}
+
+
+function updateCellSize(){
+  let newCellSize = document.getElementById("cellSizeInput").value;
+  let newGrid = createGrid(mainCanvas.width/newCellSize, mainCanvas.height/newCellSize);
+
+  for (let i = 0; i < Math.min(newGrid.length, grid.length); i++) {
+    for (let j = 0; j < Math.min(newGrid[0].length, grid[0].length); j++) {
+      newGrid[i][j] = grid[i][j];
+    }
+  }
+
+  prevGrids = [];
+  cellSize = newCellSize;
+  // cellSize = document.getElementById("cellSizeInput").value;
+  grid = newGrid;
+  drawGrid(mainCanvas, grid, cellSize);
 }
 
 
@@ -143,7 +176,7 @@ function prevState(){
 function initializeEvents(){
   document.getElementById("pauseButton").addEventListener("click", () => togglePause());
 
-  document.getElementById("clearButton").addEventListener("click", () => clearGrid());
+  document.getElementById("resetButton").addEventListener("click", () => reset());
 
   document.getElementById("forwardButton").addEventListener("click", () => nextState());
 
@@ -156,6 +189,8 @@ function initializeEvents(){
   document.getElementById("linesInput").addEventListener("click", () => toggleGridLines());
 
   document.getElementById("fpsInput").addEventListener("input", () => updateFPS());
+
+  document.getElementById("cellSizeInput").addEventListener("input", () => updateCellSize());
 
   subCanvas.addEventListener("mousedown", (event) => beginDrawInput(event));
 

@@ -2,14 +2,29 @@ function createCanvas(width, height){
   let canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
-  canvas.style.border = "1px #9e9e9e solid";
-  canvas.style.left = 0;
-  canvas.style.top = 0;
 
   let main = document.getElementById("main");
   main.appendChild(canvas);
 
+  let header = document.getElementById("mainHeader");
+  header.style.width = (canvas.width+2).toString() + "px";
+
   return canvas;
+}
+
+
+function drawBorders(canvas, grid, cellSize){
+  let ctx = canvas.getContext("2d");
+  ctx.strokeStyle = "#9e9e9e";
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(grid[0].length*cellSize, 0);
+  ctx.lineTo(grid[0].length*cellSize, grid.length*cellSize);
+  ctx.lineTo(0, grid.length*cellSize);
+  ctx.lineTo(0, 0);
+  ctx.stroke();
 }
 
 
@@ -18,14 +33,16 @@ function drawGridLines(canvas, grid, cellSize){
   ctx.strokeStyle = "#9e9e9e";
   ctx.lineWidth = 2;
 
-  for (let i = 0; i <= grid.length; i++) {
+  drawBorders(canvas, grid, cellSize);
+  
+  for (let i = 1; i < grid.length; i++) {
     ctx.beginPath();
     ctx.moveTo(0, i*cellSize);
     ctx.lineTo(grid[0].length*cellSize, i*cellSize);
     ctx.stroke();
   }
 
-  for (let j = 0; j <= grid[0].length; j++) {
+  for (let j = 1; j < grid[0].length; j++) {
     ctx.beginPath();
     ctx.moveTo(j*cellSize, 0);
     ctx.lineTo(j*cellSize, grid.length*cellSize);
@@ -64,12 +81,6 @@ function drawGrid(canvas, grid, cellSize){
       }
     }
   }
-}
-
-
-function clearGrid(){
-  grid = createGrid(grid[0].length, grid.length);
-  drawGrid(mainCanvas, grid, cellSize);
 }
 
 

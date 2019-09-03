@@ -3,11 +3,36 @@
 <head>
   <title>Game of Life</title>
   <link rel="stylesheet" href="./stylesheets/main.css">
+  <link href='https://fonts.googleapis.com/css?family=Karla' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=KoHo' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Overpass Mono' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Pavanam' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Play' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Press Start 2P' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto Mono' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Share Tech Mono' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Source Code Pro' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Ubuntu Mono' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Anonymous Pro' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Blinker' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Changa' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Cousine' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Geo' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Hepta Slab' rel='stylesheet'>
 </head>
 <body>
-  <div id='main' style="position: relative;">
+  <h1 id='mainHeader'>
+    <p>
+      Conway's Game of Life
+    </p>
+    <a href="https://github.com/Jared-Ma/Game-of-Life">
+      Github
+    </a>
+  </h1>
+  <div id='main'>
   </div>
   <div id='sub'>
+
     <div id='sub1'>
       <div id='buttons'>
         <div>
@@ -20,7 +45,7 @@
           <button id="forwardButton">Forward</button>
         </div>
         <div>
-          <button id="clearButton">Clear</button>
+          <button id="resetButton">Reset</button>
         </div>
       </div>
 
@@ -36,21 +61,21 @@
         </div>
         <div class='switchContainer'>
           <header>Edge wrap:</header>
-          <div id="onText" class="switchText">On</div>
+          <div id="onWrapText" class="switchText">On</div>
           <label class="switch">
             <input id="wrapInput" type="checkbox" autocomplete="off">
             <span class="slider"></span>
           </label>
-          <div id="offText" class="switchText">Off</div>
+          <div id="offWrapText" class="switchText">Off</div>
         </div>
         <div class='switchContainer'>
           <header>Grid Lines:</header>
-          <div id="onText" class="switchText">On</div>
+          <div id="onLinesText" class="switchText">On</div>
           <label class="switch">
-            <input id="linesInput" type="checkbox" autocomplete="off">
+            <input id="linesInput" type="checkbox" autocomplete="off" checked="true">
             <span class="slider"></span>
           </label>
-          <div id="offText" class="switchText">Off</div>
+          <div id="offLinesText" class="switchText">Off</div>
         </div>
       </div>
     </div>
@@ -64,27 +89,19 @@
         </div>
         <div class="rangeContainer">
           <header>Cell Size:</header>
-          <input id="cellSizeInput" type="range" min="10" max="50" step="10" value="20" autocomplete="off" oninput="cellSizeOutput.value = cellSizeInput.value">
-          <output id="cellSizeOutput">20</output>
-        </div>
-        <div class="rangeContainer">
-          <header>Width:</header>
-          <input id="widthInput" type="range" min="300" max="1600" step="100" value="1600" autocomplete="off" oninput="widthOutput.value = widthInput.value">
-          <output id="widthOutput">1600</output>
-        </div>
-        <div class="rangeContainer">
-          <header>Height:</header>
-          <input id="heightInput" type="range" min="300" max="700" step="50" value="700" autocomplete="off" oninput="heightOutput.value = heightInput.value">
-          <output id="heightOutput">700</output>
+          <input id="cellSizeInput" type="range" min="10" max="40" step="10" value="40" autocomplete="off" oninput="cellSizeOutput.value = cellSizeInput.value">
+          <output id="cellSizeOutput">40</output>
         </div>
       </div>
     </div>
+
     <div id='sub3'>
       <div id='statistics'>
         <div id="generationCount">Generation: 0</div>
         <div id="populationCount">Population: 0</div>
       </div>
     </div>
+
   </div>
   <script type="text/javascript" src="/scripts/grid.js"></script>
   <script type="text/javascript" src="/scripts/cell.js"></script>

@@ -1,14 +1,14 @@
 function setup(){
-  cellSize = 20;
-  canvasWidth = Math.floor(1600/cellSize) * cellSize;
-  canvasHeight = Math.floor(700/cellSize) * cellSize;
+  cellSize = 40;
+  canvasWidth = Math.floor(1320/cellSize) * cellSize;
+  canvasHeight = Math.floor(720/cellSize) * cellSize;
   mainCanvas = createCanvas(canvasWidth, canvasHeight);
   mainCanvas.id = "mainCanvas"
   subCanvas = createCanvas(canvasWidth, canvasHeight);
   subCanvas.id = "subCanvas"
 
-  grid = createGrid(mainCanvas.width/cellSize, mainCanvas.height/cellSize);
-  drawGridLines(subCanvas, grid, cellSize);
+  grid = createGrid(canvasWidth/cellSize, canvasHeight/cellSize);
+  drawBorders(subCanvas, grid, cellSize);
   prevGrids = [];
 
   generation = 0;
@@ -18,7 +18,7 @@ function setup(){
   action = "add"
   population = 0;
   wrap = true;
-  gridLines = true;
+  gridLines = false;
   mouseDown = false;
   patterns = new Patterns();
 
